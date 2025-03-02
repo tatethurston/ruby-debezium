@@ -4,11 +4,16 @@ source 'https://rubygems.org'
 
 gemspec
 
+gem 'rake', '~> 13.2'
+
 group :test do
-  gem 'minitest', '~> 5.0'
+  gem 'minitest',            '~> 5.0'
+  gem 'simplecov',           '~> 0.22'
+  gem 'simplecov-cobertura', '~> 2.1'
 end
 
 group :development do
-  gem 'rubocop', '~> 1.0'
-  gem 'rubocop-minitest', '~> 0.37'
+  gem 'rubocop',          '~> 1.0',  require: false
+  gem 'rubocop-minitest', '~> 0.37', require: false
+  gem 'yard',             '~> 0.9',  require: false
 end

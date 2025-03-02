@@ -30,3 +30,8 @@ jobs:
       - name: Test
         run: |
           bundle exec rake test
+      - name: Codecov
+        uses: codecov/codecov-action@v5
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
+          flags: ${{ matrix.ruby }}
