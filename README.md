@@ -2,6 +2,11 @@
 
 `ruby-debezium` provides a set of classes for parsing and interacting with Debezium event messages.
 
+[![License](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/tatethurston/ruby-debezium/blob/main/LICENSE)
+[![CI](https://github.com/tatethurston/ruby-debezium/actions/workflows/ci.yml/badge.svg)](https://github.com/tatethurston/ruby-debezium/actions/workflows/ci.yml)
+[![Codecov](https://img.shields.io/codecov/c/github/tatethurston/ruby-debezium/main.svg?style=flat-square)](https://codecov.io/gh/tatethurston/ruby-debezium)
+[![YARD Docs](https://img.shields.io/badge/docs-YARD-blue.svg)](https://tatethurston.github.io/ruby-debezium/)
+
 ## Installation
 
 Add the following to your Gemfile:
@@ -12,7 +17,7 @@ gem 'debezium', '~> 0.1'
 
 ## Usage
 
-### Message Class
+### Message
 
 The `Message` class represents a Debezium message and provides methods to access the before and after states of a record, along with the type of operation (e.g., create, update, delete). You can create a Message instance by passing a Debezium event message (in JSON format) to the constructor.
 
