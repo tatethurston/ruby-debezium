@@ -5,15 +5,24 @@ require 'test_helper'
 class MessageTest < Minitest::Test
   class CreateTest < Minitest::Test
     def setup
-      json = '{"op": "c", "before": null, "after": {"id": 1, "name": "John Doe"}}'
-
-      @message = Debezium::Message.new(json)
+      @json    = '{"op": "c", "before": null, "after": {"id": 1, "name": "John Doe"}}'
+      @message = Debezium::Message.new(@json)
     end
 
-    def test_initialize_create
+    def test_op
       assert_equal :create, @message.op
+    end
+
+    def test_before
       assert_nil @message.before
+    end
+
+    def test_after
       assert_equal({ 'id' => 1, 'name' => 'John Doe' }, @message.after)
+    end
+
+    def test_json
+      assert_equal JSON.parse(@json), @message.json
     end
 
     def test_create?
@@ -35,14 +44,24 @@ class MessageTest < Minitest::Test
 
   class UpdateTest < Minitest::Test
     def setup
-      json = '{"op": "u", "before": {"id": 1, "name": "John Doe"}, "after": {"id": 1, "name": "Jane Doe"}}'
-      @message = Debezium::Message.new(json)
+      @json    = '{"op": "u", "before": {"id": 1, "name": "John Doe"}, "after": {"id": 1, "name": "Jane Doe"}}'
+      @message = Debezium::Message.new(@json)
     end
 
-    def test_initialize_update
+    def test_op
       assert_equal :update, @message.op
+    end
+
+    def test_before
       assert_equal({ 'id' => 1, 'name' => 'John Doe' }, @message.before)
+    end
+
+    def test_after
       assert_equal({ 'id' => 1, 'name' => 'Jane Doe' }, @message.after)
+    end
+
+    def test_json
+      assert_equal JSON.parse(@json), @message.json
     end
 
     def test_create?
@@ -66,15 +85,24 @@ class MessageTest < Minitest::Test
 
   class DeleteTest < Minitest::Test
     def setup
-      json = '{"op": "d", "before": {"id": 1, "name": "John Doe"}, "after": null}'
-
-      @message = Debezium::Message.new(json)
+      @json    = '{"op": "d", "before": {"id": 1, "name": "John Doe"}, "after": null}'
+      @message = Debezium::Message.new(@json)
     end
 
-    def test_initialize_delete
+    def test_op
       assert_equal :delete, @message.op
+    end
+
+    def test_before
       assert_equal({ 'id' => 1, 'name' => 'John Doe' }, @message.before)
+    end
+
+    def test_after
       assert_nil @message.after
+    end
+
+    def test_json
+      assert_equal JSON.parse(@json), @message.json
     end
 
     def test_create?
@@ -96,15 +124,24 @@ class MessageTest < Minitest::Test
 
   class UnknownTest < Minitest::Test
     def setup
-      json = '{"op": "x", "before": null, "after": null}'
-
-      @message = Debezium::Message.new(json)
+      @json    = '{"op": "x", "before": null, "after": null}'
+      @message = Debezium::Message.new(@json)
     end
 
-    def test_initialize_unknown
+    def test_op
       assert_equal :unknown, @message.op
+    end
+
+    def test_before
       assert_nil @message.before
+    end
+
+    def test_after
       assert_nil @message.after
+    end
+
+    def test_json
+      assert_equal JSON.parse(@json), @message.json
     end
 
     def test_create?

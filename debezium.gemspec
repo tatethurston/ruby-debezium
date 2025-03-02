@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 Gem::Specification.new do |spec|
-  spec.name          = 'ruby-debezium'
+  spec.name          = 'debezium'
   spec.version       = '0.1'
   spec.authors       = ['Tate Thurston']
 

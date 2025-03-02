@@ -8,28 +8,28 @@ module Debezium
   # of operation and access the changes between the `before` and `after` states in case of an update operation.
   #
   class Message
-    # @return [Object] The `after` state of the database record.
+    # @return [Object] The `after` state of the record.
     attr_accessor :after
 
-    # @return [Object] The `before` state of the database record.
+    # @return [Object] The `before` state of the record.
     attr_accessor :before
 
     # @return [Symbol] The operation type (`:create`, `:update`, `:delete`, or `:unknown`).
     attr_accessor :op
 
-    # @return [Hash] The raw parsed JSON data representing the Debezium event.
-    attr_accessor :raw
+    # @return [Hash] The parsed JSON of the event.
+    attr_accessor :json
 
     # Initializes a new Message instance by parsing the given Debezium JSON message.
     #
     # @param json [String] The Debezium JSON message to parse.
     # @return [Message] The newly created Message instance.
     def initialize(json)
-      @raw = JSON.parse(json)
+      @json = JSON.parse(json)
 
-      @before = @raw['before']
-      @after  = @raw['after']
-      @op     = parse_op(@raw['op'])
+      @before = @json['before']
+      @after  = @json['after']
+      @op     = parse_op(@json['op'])
     end
 
     # Checks if the operation is a "create" operation.
@@ -59,7 +59,7 @@ module Debezium
     def changes
       return nil unless update?
 
-      Change.new(before, after)
+      @changes ||= Change.new(before, after)
     end
 
     private
@@ -67,7 +67,7 @@ module Debezium
     # Parses the operation type from the given Debezium operation code.
     #
     # @param operation [String] The Debezium operation code (`'c'` for create, `'u'` for update, `'d'` for delete).
-    # @return [Symbol] The corresponding operation symbol (`:create`, `:update`, `:delete`, or `:unknown`).
+    # @return [Symbol] The operation (`:create`, `:update`, `:delete`, or `:unknown`).
     def parse_op(operation)
       case operation
       when 'c'
