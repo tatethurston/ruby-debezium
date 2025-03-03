@@ -18,3 +18,4 @@ jobs:
           bundle exec rake release
         env:
           GEM_HOST_API_KEY: ${{ secrets.RUBYGEMS_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
