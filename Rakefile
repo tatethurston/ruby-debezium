@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 require 'rake/testtask'
-require 'bundler/gem_tasks' # Adds `rake build`, `rake install`, and `rake release`
 require 'rubocop/rake_task'
 require 'yard'
 

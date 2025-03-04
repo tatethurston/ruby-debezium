@@ -13,9 +13,7 @@ jobs:
         with:
           bundler-cache: true
       - run: |
-          git config --global user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git config --global user.name "github-actions[bot]"
-          bundle exec rake release
+          gem build *.gemspec
+          gem push *.gem
         env:
           GEM_HOST_API_KEY: ${{ secrets.RUBYGEMS_TOKEN }}
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
