@@ -24,6 +24,10 @@ jobs:
       - name: Bundler Audit
         run: |
           bundle exec bundler-audit check --update
+      - name: Licensed
+        run: |
+          licensed cache
+          licensed status
   test:
     runs-on: ubuntu-latest
     strategy:

@@ -1,4 +1,5 @@
+.licenses
 .yardoc
 coverage
 doc
-node_modules/
+node_modules

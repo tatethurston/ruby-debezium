@@ -1,0 +1,7 @@
+sources:
+  bundler: true
+
+allowed:
+  - mit
+  - bsd-2-clause
+  - bsd-3-clause
