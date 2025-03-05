@@ -25,11 +25,10 @@ module Debezium
     # @param json [String] The Debezium JSON message to parse.
     # @return [Message] The newly created Message instance.
     def initialize(json)
-      @json = JSON.parse(json)
-
+      @json   = JSON.parse(json)
       @before = @json['before']
       @after  = @json['after']
-      @op     = parse_op(@json['op'])
+      @op     = parse_op
     end
 
     # Checks if the operation is a "create" operation.
@@ -66,10 +65,9 @@ module Debezium
 
     # Parses the operation type from the given Debezium operation code.
     #
-    # @param operation [String] The Debezium operation code (`'c'` for create, `'u'` for update, `'d'` for delete).
     # @return [Symbol] The operation (`:create`, `:update`, `:delete`, or `:unknown`).
-    def parse_op(operation)
-      case operation
+    def parse_op
+      case @json['op']
       when 'c'
         :create
       when 'u'

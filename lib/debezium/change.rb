@@ -8,11 +8,16 @@ module Debezium
     # @param old [Hash] The original hash.
     # @param new [Hash] The modified hash.
     def initialize(old, new)
-      @additions     = {}
-      @removals      = {}
-      @modifications = {}
+      @additions = new.reject { |key| old.key?(key) }
+      @removals  = old.reject { |key| new.key?(key) }
 
-      hash_diff(old, new)
+      @modifications = {}
+      old.each do |key, old_value|
+        new_value = new[key]
+        next if @removals.key?(key) || new_value == old_value
+
+        @modifications[key] = [new_value, old_value]
+      end
     end
 
     # Checks if the provided key was added.
@@ -58,25 +63,6 @@ module Debezium
     # @return [Array<Array>] An array of key-value pairs showing new and old values.
     def modifications
       @modifications.to_a
-    end
-
-    private
-
-    # Computes the differences between two hashes and categorizes them into additions, removals, and modifications.
-    #
-    # @param old_hash [Hash] The original hash.
-    # @param new_hash [Hash] The modified hash.
-    # @return [void]
-    def hash_diff(old_hash, new_hash)
-      @additions     = new_hash.reject { |key| old_hash.key?(key) }
-      @removals      = old_hash.reject { |key| new_hash.key?(key) }
-
-      old_hash.each do |key, old_value|
-        new_value = new_hash[key]
-        next if @removals.key?(key) || new_value == old_value
-
-        @modifications[key] = [new_value, old_value]
-      end
     end
   end
 end
