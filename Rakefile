@@ -15,3 +15,8 @@ end
 YARD::Rake::YardocTask.new do |t|
   t.files = ['lib/**/*.rb']
 end
+
+desc 'Run Prettier to format files'
+task :prettier do
+  sh "npx prettier --check '**/*.{yml,md}'"
+end

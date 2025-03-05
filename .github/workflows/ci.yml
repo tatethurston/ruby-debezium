@@ -12,9 +12,18 @@ jobs:
       - uses: ruby/setup-ruby@v1
         with:
           bundler-cache: true
-      - name: Lint
+      - uses: actions/setup-node@v4
+        with:
+          cache: "npm"
+      - name: RuboCop
         run: |
           bundle exec rubocop --format github
+      - name: Prettier
+        run: |
+          npx prettier --check '**/*.{yml,md}'
+      - name: Bundler Audit
+        run: |
+          bundle exec bundler-audit check --update
   test:
     runs-on: ubuntu-latest
     strategy:

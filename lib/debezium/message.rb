@@ -9,16 +9,16 @@ module Debezium
   #
   class Message
     # @return [Object] The `after` state of the record.
-    attr_accessor :after
+    attr_reader :after
 
     # @return [Object] The `before` state of the record.
-    attr_accessor :before
+    attr_reader :before
 
     # @return [Symbol] The operation type (`:create`, `:update`, `:delete`, or `:unknown`).
-    attr_accessor :op
+    attr_reader :op
 
     # @return [Hash] The parsed JSON of the event.
-    attr_accessor :json
+    attr_reader :json
 
     # Initializes a new Message instance by parsing the given Debezium JSON message.
     #

@@ -3,3 +3,4 @@ AllCops:
 
 plugins:
   - rubocop-minitest
+  - rubocop-performance
