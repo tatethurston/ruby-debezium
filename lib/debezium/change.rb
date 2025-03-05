@@ -73,7 +73,7 @@ module Debezium
 
       old_hash.each do |key, old_value|
         new_value = new_hash[key]
-        next if @removals.key?(key) || new_value == old_value 
+        next if @removals.key?(key) || new_value == old_value
 
         @modifications[key] = [new_value, old_value]
       end
