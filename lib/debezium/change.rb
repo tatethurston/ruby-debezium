@@ -68,48 +68,14 @@ module Debezium
     # @param new_hash [Hash] The modified hash.
     # @return [void]
     def hash_diff(old_hash, new_hash)
-      hash_additions(old_hash, new_hash)
-      hash_removals(old_hash, new_hash)
-      hash_modifications(old_hash, new_hash)
-    end
+      @additions     = new_hash.reject { |key| old_hash.key?(key) }
+      @removals      = old_hash.reject { |key| new_hash.key?(key) }
 
-    # Computes hash additions between two hashes.
-    #
-    # @param old_hash [Hash] The original hash.
-    # @param new_hash [Hash] The modified hash.
-    # @return [void]
-    def hash_additions(old_hash, new_hash)
-      new_hash.each do |key, value|
-        next if old_hash.key?(key)
+      old_hash.each do |key, old_value|
+        new_value = new_hash[key]
+        next if @removals.key?(key) || new_value == old_value 
 
-        @additions[key] = value
-      end
-    end
-
-    # Computes hash removals between two hashes.
-    #
-    # @param old_hash [Hash] The original hash.
-    # @param new_hash [Hash] The modified hash.
-    # @return [void]
-    def hash_removals(old_hash, new_hash)
-      old_hash.each do |key, value|
-        next if new_hash.key?(key)
-
-        @removals[key] = value
-      end
-    end
-
-    # Computes hash modifications between two hashes.
-    #
-    # @param old_hash [Hash] The original hash.
-    # @param new_hash [Hash] The modified hash.
-    # @return [void]
-    def hash_modifications(old_hash, new_hash)
-      old_hash.each do |key, value|
-        next unless new_hash.key?(key)
-        next if new_hash[key] == value
-
-        @modifications[key] = [new_hash[key], value]
+        @modifications[key] = [new_value, old_value]
       end
     end
   end
