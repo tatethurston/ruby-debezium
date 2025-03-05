@@ -18,6 +18,9 @@ jobs:
       - name: RuboCop
         run: |
           bundle exec rubocop --format github
+      - name: Reek
+        run: |
+          bundle exec reek
       - name: Prettier
         run: |
           npx prettier --check '**/*.{yml,md}'

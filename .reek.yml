@@ -1,0 +1,5 @@
+---
+directories:
+  "test":
+    IrresponsibleModule:
+      enabled: false
