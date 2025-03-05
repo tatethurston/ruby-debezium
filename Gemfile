@@ -16,6 +16,7 @@ group :development do
   gem 'bundler-audit',       '~> 0.9',  require: false
   gem 'rubocop',             '~> 1.0',  require: false
   gem 'rubocop-minitest',    '~> 0.37', require: false
+  gem 'rubocop-packaging',   '~> 0.5',  require: false
   gem 'rubocop-performance', '~> 1.24', require: false
   gem 'yard',                '~> 0.9',  require: false
 end

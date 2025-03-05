@@ -6,4 +6,4 @@ SimpleCov.start
 SimpleCov.formatter = SimpleCov::Formatter::CoberturaFormatter
 
 require 'minitest/autorun'
-require_relative '../lib/debezium'
+require 'debezium'
