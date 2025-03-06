@@ -1,11 +1,11 @@
 # Debezium
 
-`ruby-debezium` provides a set of classes for parsing and interacting with Debezium event messages.
-
 [![License](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/tatethurston/ruby-debezium/blob/main/LICENSE)
 [![CI](https://github.com/tatethurston/ruby-debezium/actions/workflows/ci.yml/badge.svg)](https://github.com/tatethurston/ruby-debezium/actions/workflows/ci.yml)
 [![Codecov](https://img.shields.io/codecov/c/github/tatethurston/ruby-debezium/main.svg?style=flat-square)](https://codecov.io/gh/tatethurston/ruby-debezium)
 [![YARD Docs](https://img.shields.io/badge/docs-YARD-blue.svg)](https://tatethurston.github.io/ruby-debezium/)
+
+`ruby-debezium` provides a set of classes for parsing and interacting with Debezium event messages.
 
 ## Installation
 
