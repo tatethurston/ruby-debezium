@@ -5,32 +5,49 @@ on:
       - main
   pull_request:
 jobs:
-  lint:
+  rubocop:
+    name: RuboCop
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - uses: ruby/setup-ruby@v1
-        with:
-          bundler-cache: true
+      - uses: ./.github/actions/build
+      - run: |
+          bundle exec rubocop --format github
+  reek:
+    name: Reek
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: ./.github/actions/build
+      - run: |
+          bundle exec reek ./lib --format github
+  bundler_audit:
+    name: Bundler Audit
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: ./.github/actions/build
+      - run: |
+          bundle exec bundler-audit check --update
+  licensed:
+    name: Licensed
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: ./.github/actions/build
+      - run: |
+          bundle exec licensed cache
+          bundle exec licensed status
+  prettier:
+    name: Prettier
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
         with:
           cache: "npm"
-      - name: RuboCop
-        run: |
-          bundle exec rubocop --format github
-      - name: Reek
-        run: |
-          bundle exec reek ./lib --format github
-      - name: Prettier
-        run: |
+      - run: |
           npx prettier --check '**/*.{yml,md}'
-      - name: Bundler Audit
-        run: |
-          bundle exec bundler-audit check --update
-      - name: Licensed
-        run: |
-          bundle exec licensed cache
-          bundle exec licensed status
   test:
     runs-on: ubuntu-latest
     strategy:
@@ -39,10 +56,7 @@ jobs:
         ruby: ["3.2", "3.3", "3.4"]
     steps:
       - uses: actions/checkout@v4
-      - uses: ruby/setup-ruby@v1
-        with:
-          ruby-version: ${{ matrix.ruby }}
-          bundler-cache: true
+      - uses: ./.github/actions/build
       - name: Test
         run: |
           bundle exec rake test
