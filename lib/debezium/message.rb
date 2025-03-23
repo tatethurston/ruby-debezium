@@ -8,27 +8,17 @@ module Debezium
   # of operation and access the changes between the `before` and `after` states in case of an update operation.
   #
   class Message
-    # @return [Object] The `after` state of the record.
-    attr_reader :after
-
-    # @return [Object] The `before` state of the record.
-    attr_reader :before
-
     # @return [Symbol] The operation type (`:create`, `:update`, `:delete`, or `:unknown`).
     attr_reader :op
-
-    # @return [Hash] The parsed JSON of the event.
-    attr_reader :json
 
     # Initializes a new Message instance by parsing the given Debezium JSON message.
     #
     # @param json [String] The Debezium JSON message to parse.
     # @return [Message] The newly created Message instance.
     def initialize(json)
-      @json   = JSON.parse(json)
-      @before = @json['before']
-      @after  = @json['after']
-      @op     = parse_op
+      @json    = JSON.parse(json)
+      @payload = @json['payload']
+      @op      = parse_op
     end
 
     # Checks if the operation is a "create" operation.
@@ -52,13 +42,16 @@ module Debezium
       @op == :delete
     end
 
-    # Returns the changes between the `before` and `after` states for update operations.
+    # Returns the changes between the `before` and `after` states.
     #
-    # @return [Change, nil] Returns a `Change` object if the operation is an update; otherwise `nil`.
+    # @return [Change] Returns a `Change` object.
     def changes
-      return nil unless update?
+      @changes ||= Change.new(@payload['before'], @payload['after'])
+    end
 
-      @changes ||= Change.new(before, after)
+    # @return [Hash] The parsed JSON of the event.
+    def to_h
+      @json
     end
 
     private
@@ -67,7 +60,7 @@ module Debezium
     #
     # @return [Symbol] The operation (`:create`, `:update`, `:delete`, or `:unknown`).
     def parse_op
-      case @json['op']
+      case @payload['op']
       when 'c'
         :create
       when 'u'

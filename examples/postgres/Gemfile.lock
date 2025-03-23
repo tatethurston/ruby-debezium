@@ -1,0 +1,22 @@
+GEM
+  remote: https://rubygems.org/
+  specs:
+    debezium (0.1)
+    digest-crc (0.7.0)
+      rake (>= 12.0.0, < 14.0.0)
+    pg (1.5.9)
+    rake (13.2.1)
+    ruby-kafka (1.5.0)
+      digest-crc
+
+PLATFORMS
+  arm64-darwin-23
+  ruby
+
+DEPENDENCIES
+  debezium (~> 0.1)
+  pg (~> 1.5)
+  ruby-kafka (~> 1.5)
+
+BUNDLED WITH
+   2.6.5

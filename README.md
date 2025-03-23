@@ -31,16 +31,14 @@ message.update?  # => true
 message.create?  # => false
 message.delete?  # => false
 
-# Inspecting the 'before' and 'after' states
-message.before # => {"id": 1, "name": "John"}
-message.after  # => {"id": 1, "name": "Jane"}
-
-# Inspecting the changes (update only)
+# Inspecting the changes
+message.changes.before           # => {"id": 1, "name": "John"}
+message.changes.after            # => {"id": 1, "name": "Jane"}
 message.changes.additions        # => []
-message.changes.added?(:foo)     # => false
+message.changes.added?(:name)    # => false
 message.changes.removals         # => []
-message.changes.removed?(:foo)   # => false
-message.changes.modifications    # => [[:name, ["Jane", "John"]]]
+message.changes.removed?(:name)  # => false
+message.changes.modifications    # => { name: ["Jane", "John"] }
 message.changes.modified?(:name) # => true
 ```
 

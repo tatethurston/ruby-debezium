@@ -1,4 +1,9 @@
 ---
+detectors:
+  NilCheck:
+    enabled: false
+  RepeatedConditional:
+    enabled: false
 directories:
   "test":
     IrresponsibleModule:
