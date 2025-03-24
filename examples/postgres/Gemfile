@@ -5,4 +5,4 @@ source 'https://rubygems.org'
 gem 'pg', '~> 1.5'
 gem 'ruby-kafka', '~> 1.5'
 
-gem 'debezium', '~> 0.1'
+gem 'debezium', path: '../..'

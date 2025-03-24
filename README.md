@@ -15,6 +15,37 @@ Add the following to your Gemfile:
 gem 'debezium', '~> 0.1'
 ```
 
+## Example
+
+```ruby
+# frozen_string_literal: true
+
+require 'ruby-kafka'
+require 'debezium'
+
+kafka    = Kafka.new(seed_brokers: ['localhost:9092'])
+consumer = kafka.consumer(group_id: 'my-consumer-group')
+consumer.subscribe('foo.bar.baz')
+
+consumer.each_message do |msg|
+  next if msg.value.nil?
+
+  message = Debezium::Message.new(msg.value)
+
+  case message.op
+  when :create
+    puts "Created..."
+  when :update
+    puts "Updated..."
+  when :delete
+    puts "Deleted..."
+  else
+    puts "Unknown msg:"
+    puts msg
+  end
+end
+```
+
 ## Usage
 
 ### Message
@@ -22,7 +53,7 @@ gem 'debezium', '~> 0.1'
 The `Message` class represents a Debezium message and provides methods to access the before and after states of a record, along with the type of operation (e.g., create, update, delete). You can create a Message instance by passing a Debezium event message (in JSON format) to the constructor.
 
 ```ruby
-json    = '{"before": {"id": 1, "name": "John"}, "after": {"id": 1, "name": "Jane"}, "op": "u"}'
+json    = '"{payload": {"before": {"id": 1, "name": "John"}, "after": {"id": 1, "name": "Jane"}, "op": "u"}}'
 message = Debezium::Message.new(json)
 
 # Inspecting the operation type

@@ -1,7 +1,11 @@
+PATH
+  remote: ../..
+  specs:
+    debezium (0.2)
+
 GEM
   remote: https://rubygems.org/
   specs:
-    debezium (0.1)
     digest-crc (0.7.0)
       rake (>= 12.0.0, < 14.0.0)
     pg (1.5.9)
@@ -14,7 +18,7 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
-  debezium (~> 0.1)
+  debezium!
   pg (~> 1.5)
   ruby-kafka (~> 1.5)
 
