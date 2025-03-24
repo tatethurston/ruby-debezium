@@ -2,7 +2,7 @@
 
 Gem::Specification.new do |spec|
   spec.name          = 'debezium'
-  spec.version       = '0.1'
+  spec.version       = '0.2'
   spec.authors       = ['Tate Thurston']
 
   spec.summary       = 'A gem to handle CDC messages from Debezium'

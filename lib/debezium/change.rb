@@ -3,21 +3,19 @@
 module Debezium
   # Represents the differences between two hashes, categorizing them as additions, removals, or modifications.
   class Change
+    # @return [Object, nil] The `after` state of the record.
+    attr_reader :after
+
+    # @return [Object, nil] The `before` state of the record.
+    attr_reader :before
+
     # Initializes a Change object and computes the differences between two hashes.
     #
-    # @param old [Hash] The original hash.
-    # @param new [Hash] The modified hash.
-    def initialize(old, new)
-      @additions = new.reject { |key| old.key?(key) }
-      @removals  = old.reject { |key| new.key?(key) }
-
-      @modifications = {}
-      old.each do |key, old_value|
-        new_value = new[key]
-        next if @removals.key?(key) || new_value == old_value
-
-        @modifications[key] = [new_value, old_value]
-      end
+    # @param before [Hash] The original hash.
+    # @param after [Hash] The modified hash.
+    def initialize(before, after)
+      @before        = before
+      @after         = after
     end
 
     # Checks if the provided key was added.
@@ -25,7 +23,7 @@ module Debezium
     # @param key [Object] The key to check.
     # @return [Boolean] True if the key was added, otherwise false.
     def added?(key)
-      @additions.include?(key)
+      additions.include?(key)
     end
 
     # Checks if the provided key was removed.
@@ -33,7 +31,7 @@ module Debezium
     # @param key [Object] The key to check.
     # @return [Boolean] True if the key was removed, otherwise false.
     def removed?(key)
-      @removals.include?(key)
+      removals.include?(key)
     end
 
     # Checks if the provided key was modified.
@@ -41,28 +39,55 @@ module Debezium
     # @param key [Object] The key to check.
     # @return [Boolean] True if the key was modified, otherwise false.
     def modified?(key)
-      @modifications.include?(key)
+      modifications.include?(key)
     end
 
     # Returns the list of added key-value pairs.
     #
-    # @return [Array<Array>] An array of key-value pairs that were added.
+    # @return [Hash{Symbol => Object] A hash where keys represent added attributes and values are the added value
     def additions
-      @additions.to_a
+      @additions ||= find_additions
     end
 
-    # Returns the list of removed key-value pairs.
+    # Returns the list of added key-value pairs.
     #
-    # @return [Array<Array>] An array of key-value pairs that were removed.
+    # @return [Hash{Symbol => Object] A hash where keys represent removed attributes and values are the previous value
     def removals
-      @removals.to_a
+      @removals ||= find_removals
     end
 
     # Returns the list of modified key-value pairs.
     #
-    # @return [Array<Array>] An array of key-value pairs showing new and old values.
+    # @return [Hash{Symbol => Array<Object>] A hash of where keys represent modified attributes
+    # and values are a tuple of the previous and next value.
     def modifications
-      @modifications.to_a
+      @modifications ||= find_modifications
+    end
+
+    private
+
+    def find_additions
+      return {} if @before.nil? || @after.nil?
+
+      @after.reject { |key| @before.key?(key) }
+    end
+
+    def find_removals
+      return {} if @before.nil? || @after.nil?
+
+      @before.reject { |key| @after.key?(key) }
+    end
+
+    def find_modifications
+      return {} if @before.nil? || @after.nil?
+
+      @before.filter_map do |key, before_value|
+        after_value = @after[key]
+        next if removals.key?(key) || after_value == before_value
+
+        [key, [before_value, after_value]]
+      end
+      .to_h
     end
   end
 end
